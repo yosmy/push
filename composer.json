@@ -1,5 +1,5 @@
 {
-    "name": "yosmy/push-user",
+    "name": "yosmy/push",
     "license": "MIT",
     "authors": [
         {
@@ -9,13 +9,11 @@
     ],
     "require": {
         "php": ">=7.2",
-        "ext-mongodb": "*",
-        "ext-json": "*",
         "yosmy/mongo": "@dev"
     },
     "autoload": {
         "psr-4": {
-            "Yosmy\\Push\\": [
+            "Yosmy\\": [
                 "src"
             ]
         }

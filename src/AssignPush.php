@@ -1,59 +1,56 @@
 <?php
 
-namespace Yosmy\Push;
-
-use MongoDB\UpdateResult;
+namespace Yosmy;
 
 /**
  * @di\service()
  */
-class AssignUser
+class AssignPush
 {
     /**
-     * @var ManageUserCollection
+     * @var ManagePushCollection
      */
     private $manageUserCollection;
 
     /**
-     * @param ManageUserCollection $manageUserCollection
+     * @param ManagePushCollection $manageUserCollection
      */
     public function __construct(
-        ManageUserCollection $manageUserCollection
+        ManagePushCollection $manageUserCollection
     ) {
         $this->manageUserCollection = $manageUserCollection;
     }
 
     /**
-     * @param string $id
-     * @param string $push
+     * @param string $user
+     * @param string $token
      */
     public function assign(
-        string $id,
-        string $push
+        string $user,
+        string $token
     ) {
         // Remove previous user in the same device
         $this->manageUserCollection
             ->deleteMany([
-                'push' => $push
+                'token' => $token
             ]);
 
-        /** @var UpdateResult $updateResult */
         $updateResult = $this->manageUserCollection
             ->updateOne(
                 [
-                    '_id' => $id
+                    '_id' => $user
                 ],
                 [
                     '$set' => [
-                        'push' => $push,
+                        'token' => $token,
                     ]
                 ]
             );
 
         if ($updateResult->getMatchedCount() == 0) {
             $this->manageUserCollection->insertOne([
-                '_id' => $id,
-                'push' => $push,
+                '_id' => $user,
+                'token' => $token,
             ]);
         }
     }
